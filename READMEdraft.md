@@ -32,7 +32,7 @@ Some similar computer vision projects we investigated first are listed below:
 
 After reading these papers, a major roadblock became apparent: access to good data. These papers use manually collected images and train models for flood depth using either object-detection and relative above-water visibility, by manually annotation by subjective human inference. In order to make more accurate predictions without the need for a complex and time-intensive deep learning framework, we chose to focus on flooding from Hurricane Harvey in Houston, TX due to the available flood depth data from the USGS and the large area that was under water, hopefully providing a higher likelihood of locating images.
 
-We collected images from Google, Getty, the Assosciated Press, Instagram, and Reddit, looking specifically for any images that could be manually tagged with spatial coordinates by matching up landmarks or street signs, hoping to use the locations with the USGS data to get a more accurate assessment of depth. After a few days of collecting and annotating, we decided that collecting and geolocating enough images to effectively model flood depth would require more time and resources than we had available.
+We collected images from Google, Getty, the Associated Press, Instagram, and Reddit, looking specifically for any images that could be manually tagged with spatial coordinates by matching up landmarks or street signs, hoping to use the locations with the USGS data to get a more accurate assessment of depth. After a few days of collecting and annotating, we decided that collecting and geolocating enough images to effectively model flood depth would require more time and resources than we had available.
 
 What to do, then? Pivot!
 
