@@ -44,7 +44,7 @@ Marina Baker, Upasana Mahanta, Lee Littlejohn
 
 ### Problem Statement
 
-The federal response to Hurricane Katrina was widely criticised, and since then three major pieces of legislation aimed at improving the response of FEMA have been passed: the Post-Katrina Emergency Management Reform Act of 2006, the Sandy Recovery Improvement Act of 2013, and the Disaster Recovery Reform Act of 2018. With access to FEMA grant information, USGS flood depth data, and AGI numbers from the IRS, can the efficacy of these pieces of legislation be seen in the data? If flood depth is an indicator of damage, can flood depth be used to study financial assistance from the federal government? Does the data show patterns of funding discrepencies? 
+The federal response to Hurricane Katrina was widely criticised, and since then three major pieces of legislation aimed at improving the response of FEMA have been passed: the Post-Katrina Emergency Management Reform Act of 2006, the Sandy Recovery Improvement Act of 2013, and the Disaster Recovery Reform Act of 2018. With access to FEMA grant information, USGS flood depth data, and AGI numbers from the IRS, can the efficacy of these pieces of legislation be seen in the data? If flood depth is an indicator of damage, can flood depth be used to study financial assistance from the federal government? Does the data show patterns of funding discrepancies? 
 
 ### Data Acquisition and Cleaning
 
@@ -54,9 +54,9 @@ First, we gathered flood depth measurements from the United States Geological Su
 
 The FEMA (Federal Emergency Management Agency) hosts records of financial assistance applications and grants online. We used the [applicants](https://www.fema.gov/openfema-dataset-public-assistance-applicants-v1) data and the Geolocating API to generate spatial coordinates for financial assistance, as well as [funded projects](https://www.fema.gov/openfema-dataset-public-assistance-funded-projects-details-v1). This data is presented by FEMA as raw, in that the organization admits to the presence of human error. For instance, in this case, many entries for grants and funding were negative. These entries followed patterns consistent to their positive counterparts and were thus inverted to preserve the observations.
 
-Population Data per zipcode from the 2010 Census was retrieved from the public datasets hosted on Google Bigquery.
+Population Data per zip code from the 2010 Census was retrieved from the public datasets hosted on Google Bigquery.
 
-Adjusted gross income data by zipcode is available from the IRS for 2010 at the IRS [website](https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-statistics-zip-code-data-soi).
+Adjusted gross income data by zip code is available from the IRS for 2010 at the IRS [website](https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-statistics-zip-code-data-soi).
 
 After joining the FEMA, census, and IRS data, aggregate statistics were generated for flood depths, population, grants, and AGI, resulting in two dataframes saved to CSV files in this repository. Detailed descriptions follow.
 
@@ -66,8 +66,8 @@ After joining the FEMA, census, and IRS data, aggregate statistics were generate
 |---|---|
 |latitude|Latitude of measurement|
 |longitude|Longitude of measurement|
-|site_latitude|Assumed to be identical to latitude, although minor discrepencies exist|           
-|site_longitude|Assumed to be identical to longitude, although minor discrepencies exist|         
+|site_latitude|Assumed to be identical to latitude, although minor discrepancies exist|           
+|site_longitude|Assumed to be identical to longitude, although minor discrepancies exist|         
 |eventName|Name of hurricane|                             
 |stateName|State in which measurement was taken|                            
 |countyName|County in which measurement was taken|                                                       
@@ -80,8 +80,8 @@ After joining the FEMA, census, and IRS data, aggregate statistics were generate
 |height_above_gnd_decile_by_eventName|Flood depth decile aggregated by hurricane|  
 |height_above_gnd_scaled_by_eventName|Flood depth scaled (z-score) aggregated by hurricane|  
 |elev_ft_decile_by_eventName|Measurement site elevation above sea level decile aggregated by hurricane|
-|height_above_gnd_decile_by_zip|Flood depth decile aggregated by zipcode|
-|height_above_gnd_mean_by_zip|Flood depth scaled (z-score) aggregated by zipcode|        
+|height_above_gnd_decile_by_zip|Flood depth decile aggregated by zip code|
+|height_above_gnd_mean_by_zip|Flood depth scaled (z-score) aggregated by zip code|        
 
 
 #### Data Dictionary for grants_money_pop.csv
@@ -115,19 +115,19 @@ After joining the FEMA, census, and IRS data, aggregate statistics were generate
 |totalObligated_decile_by_USGS Flood Event Name|totalObligated decile aggregated by hurricane|
 |totalObligated_scaled_by_USGS Flood Event Name|scaled totalObligated aggregated by hurricane|
 |zipcode|Zipcode of applicant|
-|population|total population aggregated by zipcode|
-|population_decile_by_zip|Population decile calculated aggregated by zipcode|
+|population|total population aggregated by zip code|
+|population_decile_by_zip|Population decile calculated aggregated by zip code|
 |population_scaled_by_zip|Population decile calculated aggregated by hurricane|
-|total_agi_per_zip|Total AGI aggregated by zipcode|
-|agi_per_capita_per_zip|AGI per capita aggregated by zipcode|
+|total_agi_per_zip|Total AGI aggregated by zip code|
+|agi_per_capita_per_zip|AGI per capita aggregated by zip code|
 
 ### Methods
 
-#### Geocoding and Revese Geocoding
+#### Geocoding and Reverse Geocoding
 
 The USGS Hurricane High Water Marks dataset is logged by latitude and longitude.
 The FEMA Relief Applications and Grants datasets are logged by postal address of the applicant.
-In order to join these datasets together, we need to establish a ZIP code for the entries in the flood data, and a coordinate pair for the entires in the grants data. For the grants data, the street address and zip code were passed to the Google Maps geo-location API which returned the appropriate latitude-longitude pair. Documentation for this API is available at https://developers.google.com/maps/documentation/geocoding/start.  For the flood data, the latitude and longitude for each entry was passed to the reverse geocoding function and the appropriate ZIPcode was returned from the API.
+In order to join these datasets together, we need to establish a ZIP code for the entries in the flood data, and a coordinate pair for the entries in the grants data. For the grants data, the street address and zip code were passed to the Google Maps geo-location API which returned the appropriate latitude-longitude pair. Documentation for this API is available at https://developers.google.com/maps/documentation/geocoding/start.  For the flood data, the latitude and longitude for each entry was passed to the reverse geocoding function and the appropriate ZIPcode was returned from the API.
 
 #### ZIP Code Aggregation
 
@@ -161,4 +161,16 @@ Assistance and Individual Assistance programs. For additional information on
 these reforms, see CRS Report R45819, The Disaster Recovery Reform Act of
 2018 (DRRA): A Summary of Selected Statutory Provisions.
 
-We wanted to examine if any of these reforms had a significant impact on the distribution of FEMA Funding for disaster relief. The ratio of interest is the ratio of mean FEMA grants in a ZIP code to the mean flood depth in a ZIP code. If the funding is scaled closely with flood severity, this ratio will have a relatively low variance across the ZIP codes. We wanted to test if this variance changes before and after each one of these reform bills. The null hypothesis is that the variance in funding ratio is equal before and after this reform bill, and the alternative hypothesis is that these variances are not equal and we can infer that the reform bill had an effect on the distribution of funding. There are several statistical tests available to test equality of variances, however many require a normal distribution, which is not present in this case. For this case, the Levene test for equality of variances was selected because this test is suggested to perform better on highly skewed data. Details for this test are available at https://www.itl.nist.gov/div898/handbook/eda/section3/eda35a.htm. None of the p-values comparing before and after each reform were significant at alpha = 0.05, so we cannot conclude with statistical certainty that these reforms had a measureable effect on the variance of the ratio between funding and severity.
+We wanted to examine if any of these reforms had a significant impact on the distribution of FEMA Funding for disaster relief. The ratio of interest is the ratio of mean FEMA grants in a ZIP code to the mean flood depth in a ZIP code. If the funding is scaled closely with flood severity, this ratio will have a relatively low variance across the ZIP codes. We wanted to test if this variance changes before and after each one of these reform bills. The null hypothesis is that the variance in funding ratio is equal before and after this reform bill, and the alternative hypothesis is that these variances are not equal and we can infer that the reform bill had an effect on the distribution of funding. There are several statistical tests available to test equality of variances, however many require a normal distribution, which is not present in this case. For this case, the Levene test for equality of variances was selected because this test is suggested to perform better on highly skewed data. Details for this test are available at https://www.itl.nist.gov/div898/handbook/eda/section3/eda35a.htm. None of the p-values comparing before and after each reform were significant at alpha = 0.05, so we cannot conclude with statistical certainty that these reforms had a measurable effect on the variance of the ratio between funding and severity.
+
+### Conclusions and Recommendations
+
+Concerning the original project prompt, to our knowledge, no dataset of images tagged with real physical depth measurements exists. This hypothetical dataset would have incredible value for the purposes of modeling flood depths from social media images.
+
+Funding distributions vary wildly: we could not find a consistent rule or pattern that guides the distribution of funding for hurricane disaster relief. We believe that further investigation into this distribution is warranted to identify potential areas of improvement. More research into assessing and quantifying flood damage based on depth data could prove invaluable to this exploration. The development of a model to assign funding based on flooding damage distributions is a worthwhile endeavor, in our opinion; however, it could prove to be a resource intensive process.
+
+Bureaucratic land divisions are frequently chosen by unknowable processes -- therefore, aggregate statistics based on zip codes, county lines, or other artificial boundaries result in artifacts in the data that do not reflect accurate distributions of funding. We recommend a more robust aggregation tactic, by real, physical geographic boundaries, or more nuanced economic subdivisions. Potential alternate or additional data sources to assist in this exploration include insurance claims or damage assessment statistics for the areas in question. In contrast, a more robust investigation may focus on the bureaucratic boundaries themselves, perhaps including congressional districts.
+
+We found no statistical effect from the three major reform measures in funding distributions with the data as is. In particular, the hurricane data available at this time is not sufficient to quantify the effects of the recent passing of the Disaster Recovery Reform Act of 2018. With data collected from future hurricanes, analysis of the effects of the DRRA can be investigated more thoroughly.
+
+
